@@ -199,6 +199,10 @@ label.check-item{color:var(--text);font-weight:400;display:flex;align-items:cent
     <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="4"/><line x1="9.5" y1="9.5" x2="14" y2="14"/></svg>
     Análise
   </button>
+  <button class="nav-item" onclick="showPage('intervencions',this)">
+    <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1v10M4 7l4 4 4-4"/><rect x="2" y="12" width="12" height="3" rx="1"/></svg>
+    Intervención
+  </button>
   <button class="nav-item" onclick="showPage('informe',this)">
     <svg class="icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 2h7l4 4v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/><polyline points="10,2 10,6 14,6"/></svg>
     Exportar informe
@@ -622,7 +626,15 @@ label.check-item{color:var(--text);font-weight:400;display:flex;align-items:cent
         <label class="check-item"><input type="checkbox" id="abrev-graficas" checked onchange="onAbrevChange()"> Aplicar en gráficas de barras</label>
         <label class="check-item"><input type="checkbox" id="abrev-sociogramas" checked onchange="onAbrevChange()"> Aplicar en sociogramas</label>
         <label class="check-item"><input type="checkbox" id="abrev-analise" checked onchange="onAbrevChange()"> Aplicar na análise</label>
-        <label class="check-item"><input type="checkbox" id="abrev-lista"> Incluír táboa de abreviación → nome completo ao final do informe</label>
+        <div style="margin-bottom:4px">
+          <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:5px">Táboa de abreviacións ao final do informe</div>
+          <select id="abrev-lista-modo" style="width:100%;font-size:12px;padding:5px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text)">
+            <option value="non">Non incluír</option>
+            <option value="basica">Incluír táboa de abreviacións básicas (Abrev. → Nome)</option>
+            <option value="num">Incluír táboa modo confidencial (Nº → Nome)</option>
+            <option value="ambas">Incluír os dous tipos de abreviacións (Nº · Abrev. · Nome)</option>
+          </select>
+        </div>
         <label class="check-item"><input type="checkbox" id="abrev-excluir-individual"> En informe individual: non abreviar o nome do alumno/a obxecto</label>
       </div>
       <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
@@ -632,7 +644,7 @@ label.check-item{color:var(--text);font-weight:400;display:flex;align-items:cent
           <label class="check-item"><input type="checkbox" id="num-sociogramas" onchange="renderAbrevPreview();onAbrevChange()"> Sociogramas</label>
           <label class="check-item"><input type="checkbox" id="num-analise" onchange="renderAbrevPreview();onAbrevChange()"> Análise</label>
         </div>
-        <label class="check-item" style="margin-bottom:8px"><input type="checkbox" id="num-inc-tabla" onchange="renderAbrevPreview()"> Incluír táboa de correspondencia Nº → Nome no informe</label>
+        <!-- Nota: a táboa de correspondencia Nº configurase no selector de táboas de abreviacións de arriba -->
         <!-- Preview table -->
         <div id="abrev-preview-wrap" style="display:none;margin-top:8px">
           <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Previsualización</div>
@@ -672,6 +684,26 @@ label.check-item{color:var(--text);font-weight:400;display:flex;align-items:cent
         <label class="check-item"><input type="checkbox" id="inc-analise-pontes" checked> Pontes sociais</label>
         <label class="check-item"><input type="checkbox" id="inc-analise-destaca" checked> Quen destaca por...</label>
         <label class="check-item"><input type="checkbox" id="inc-analise-notas"> Notas (persoas externas, autopercepcións)</label>
+
+        <div style="font-size:12px;font-weight:600;color:var(--text2);margin:12px 0 8px;text-transform:uppercase;letter-spacing:.04em">Intervención socioeducativa</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:7px">Inclúe os plans de actuación dos casos detectados na análise.</div>
+        <label class="check-item"><input type="checkbox" id="inc-interv" checked onchange="toggleIntervOpts()"> Incluír apartado de intervención</label>
+        <div id="interv-subopts" style="margin-left:18px;margin-top:6px;display:flex;flex-direction:column;gap:5px">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:2px">Os casos inclúense automaticamente segundo os detectados na análise. Escolle que información mostrar de cada un:</div>
+          <label class="check-item"><input type="checkbox" id="inc-interv-xustif" checked> Xustificación do caso detectado</label>
+          <label class="check-item"><input type="checkbox" id="inc-interv-import" checked> Importancia da intervención</label>
+          <label class="check-item" style="align-items:flex-start;gap:6px">
+            <input type="checkbox" id="inc-interv-taboa" checked style="margin-top:2px">
+            <div>
+              Táboa de intervención
+              <select id="interv-taboa-modo" style="display:inline-block;margin-left:8px;font-size:11px;padding:2px 6px;border-radius:5px;border:1px solid var(--border);background:var(--surface);color:var(--text)">
+                <option value="resumida">Descrición resumida</option>
+                <option value="completa">Descrición completa</option>
+              </select>
+            </div>
+          </label>
+          <label class="check-item"><input type="checkbox" id="inc-interv-refs" checked> Táboa de obxectivos, contidos e principios metodolóxicos</label>
+        </div>
       </div>
       <div>
         <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">Sociogramas</div>
@@ -756,6 +788,12 @@ label.check-item{color:var(--text);font-weight:400;display:flex;align-items:cent
   <div id="analise-container"><p style="color:var(--text2);font-size:13px">Introduce os datos e fai clic en "Ver análise completo" dende a pestana de entrada.</p></div>
 </div>
 
+<!-- INTERVENCIÓN SOCIOEDUCATIVA -->
+<div id="page-intervencions" class="page">
+  <div class="page-header"><h1>Intervención socioeducativa</h1><p>Plan de actuación baseado nos resultados da análise sociométrica do grupo</p></div>
+  <div id="intervencions-content"><p style="color:var(--text2);font-size:13px">Completa os cuestionarios e revisa a análise para ver as recomendacins de intervención.</p></div>
+</div>
+
 <!-- INFORME -->
 <div id="page-informe" class="page">
   <div class="page-header"><h1>Exportar informe</h1><p>Xera o informe en PDF segundo a configuración establecida no Paso 2</p></div>
@@ -818,6 +856,7 @@ function showPage(id,btn){
   if(id==='graficas') renderGraficas();
   if(id==='diagrama') renderDiagrama();
   if(id==='analise') renderAnalise();
+  if(id==='intervencions') renderIntervencions();
   if(id==='config-informe') renderInformeConfig();
   if(id==='informe') { /* export page, no render needed */ }
   // Persist state
@@ -2651,8 +2690,9 @@ function getConfig(){
     abrevGraficas: document.getElementById('abrev-graficas')?.checked,
     abrevSociogramas: document.getElementById('abrev-sociogramas')?.checked,
     abrevAnalise: document.getElementById('abrev-analise')?.checked,
-    abrevLista: document.getElementById('abrev-lista')?.checked,
-    numIncTabla: document.getElementById('num-inc-tabla')?.checked,
+    abrevListaModo: document.getElementById('abrev-lista-modo')?.value||'non',
+    abrevLista: ['basica','ambas'].includes(document.getElementById('abrev-lista-modo')?.value),
+    numIncTabla: ['num','ambas'].includes(document.getElementById('abrev-lista-modo')?.value),
     abrevExcluirIndividual: document.getElementById('abrev-excluir-individual')?.checked,
     numGraficas: document.getElementById('num-graficas')?.checked,
     numSociogramas: document.getElementById('num-sociogramas')?.checked,
@@ -2680,6 +2720,12 @@ function getConfig(){
     incAnaliseRoles: document.getElementById('inc-analise-roles')?.checked,
     incAnaliseBalance: document.getElementById('inc-analise-balance')?.checked,
     incAnaliseAten: document.getElementById('inc-analise-aten')?.checked,
+    incInterv: document.getElementById('inc-interv')?.checked,
+    incIntervXustif: document.getElementById('inc-interv-xustif')?.checked,
+    incIntervImport: document.getElementById('inc-interv-import')?.checked,
+    incIntervTaboa: document.getElementById('inc-interv-taboa')?.checked,
+    incIntervTaboaModo: document.getElementById('interv-taboa-modo')?.value||'resumida',
+    incIntervRefs: document.getElementById('inc-interv-refs')?.checked,
     incAnalisePontes: document.getElementById('inc-analise-pontes')?.checked,
     incAnaliseDestaca: document.getElementById('inc-analise-destaca')?.checked,
     incAnaliseNotas: document.getElementById('inc-analise-notas')?.checked,
@@ -4179,7 +4225,207 @@ async function exportarPDF(){
     }
   }
 
-  // ── TÁBOA DE ABREVIACIONES ───────────────────────────────────
+  // ── INTERVENCIÓN SOCIOEDUCATIVA ─────────────────────────────
+  if(cfg.incInterv){
+    const idxI=calcIndices();
+    // Always auto-detect cases
+    const casosI=[];
+    const afI1=[...new Set([...(idxI.illados||[]),...(idxI.ignoradosSocio||[])])];
+    if(afI1.length>0) casosI.push({tipo:1,alumnado:afI1});
+    if(ST.alumnos.length>=5&&(idxI.reciprocidade<35||idxI.densidadeInterna<15)) casosI.push({tipo:2});
+    const afI3=[...(idxI.rexeitadosSocio||[])];
+    if(afI3.length>0) casosI.push({tipo:3,alumnado:afI3});
+
+    newPage();
+    sectionTitle('Intervención socioeducativa');
+    para('En base aos resultados da análise sociométrica realizada, recóllense a continuación os plans de actuación para as situacins de risco detectadas.',9,[80,80,80]);
+    y+=4;
+
+    if(casosI.length===0){
+      if(y+12>pageH-margin) newPage();
+      pdf.setFillColor(240,252,244);pdf.rect(margin,y-4,contentW,12,'F');
+      pdf.setDrawColor(58,125,68);pdf.setLineWidth(0.4);pdf.rect(margin,y-4,contentW,12,'S');
+      pdf.setFont('helvetica','bold');pdf.setFontSize(9);pdf.setTextColor(58,125,68);
+      pdf.text(pdfT('Non se detectaron situacins de risco predefinidas. Os indicadores son compatibles cunha dinámica grupal saudable.'),margin+3,y);
+      y+=12;
+    } else {
+      casosI.forEach((caso,ci)=>{
+        const dI=INTERVENCIONS_DATA.casos[caso.tipo];
+        const [rI,gI,bI]=dI.cor;
+
+        // ── Case header ──
+        if(y+10>pageH-margin) newPage();
+        pdf.setFillColor(rI,gI,bI);
+        pdf.rect(margin,y-4,contentW,10,'F');
+        pdf.setFont('helvetica','bold');pdf.setFontSize(10);pdf.setTextColor(255,255,255);
+        pdf.text(pdfT('Caso '+caso.tipo+': '+dI.titulo),margin+3,y);
+        pdf.setFont('helvetica','normal');pdf.setFontSize(8);
+        pdf.text(pdfT(dI.subtitulo),margin+contentW-2,y,'right');
+        y+=10;
+
+        // ── Warning Case 3 ──
+        if(caso.tipo===3){
+          const wTxt=pdfT('PASO PREVIO: Informar á orientadora titular e reunirse co equipo antes de calquera acción. Comprobar protocolo de convivencia do centro.');
+          const wL=pdf.splitTextToSize(wTxt,contentW-6);
+          const wH=Math.max(9,wL.length*5+5);
+          if(y+wH>pageH-margin) newPage();
+          pdf.setFillColor(255,240,240);pdf.rect(margin,y-4,contentW,wH,'F');
+          pdf.setDrawColor(rI,gI,bI);pdf.setLineWidth(0.4);pdf.rect(margin,y-4,contentW,wH,'S');
+          pdf.setFont('helvetica','bold');pdf.setFontSize(8);pdf.setTextColor(rI,gI,bI);
+          wL.forEach((l,li)=>pdf.text(pdfT(l),margin+3,y+li*5));
+          y+=wH+2;
+        }
+
+        // ── Xustificación ──
+        if(cfg.incIntervXustif&&caso.alumnado&&caso.alumnado.length>0){
+          if(y+7>pageH-margin) newPage();
+          pdf.setFont('helvetica','bold');pdf.setFontSize(8);pdf.setTextColor(rI,gI,bI);
+          pdf.text('Alumnado detectado: ',margin,y);
+          pdf.setFont('helvetica','normal');pdf.setTextColor(30,30,30);
+          const aStr=pdfT(caso.alumnado.join(' · '));
+          const aL=pdf.splitTextToSize(aStr,contentW-48);
+          aL.forEach((l,li)=>pdf.text(l,margin+48,y+li*5));
+          y+=Math.max(7,aL.length*5+2);
+        }
+        if(cfg.incIntervXustif&&caso.tipo===2){
+          if(y+7>pageH-margin) newPage();
+          pdf.setFont('helvetica','normal');pdf.setFontSize(8);pdf.setTextColor(50,50,50);
+          pdf.text(pdfT('Indicadores: Reciprocidade '+idxI.reciprocidade+'% (ref. >=35%) · Cohesión '+idxI.densidadeInterna+'% (ref. >=15%)'),margin,y);
+          y+=7;
+        }
+
+        // ── Importancia ──
+        if(cfg.incIntervImport){
+          const impL=pdf.splitTextToSize(pdfT(dI.importancia),contentW-4);
+          const impH=Math.max(9,impL.length*5+5);
+          if(y+impH>pageH-margin) newPage();
+          pdf.setFillColor(rI+(255-rI)*0.88,gI+(255-gI)*0.88,bI+(255-bI)*0.88);
+          pdf.rect(margin,y-4,contentW,impH,'F');
+          pdf.setDrawColor(210,206,198);pdf.setLineWidth(0.2);pdf.rect(margin,y-4,contentW,impH,'S');
+          pdf.setFont('helvetica','italic');pdf.setFontSize(8);pdf.setTextColor(60,60,60);
+          impL.forEach((l,li)=>pdf.text(pdfT(l),margin+3,y+li*5));
+          y+=impH+2;
+        }
+
+        // ── Táboa de intervención ──
+        if(cfg.incIntervTaboa){
+          const useLong=cfg.incIntervTaboaModo==='completa';
+          const aW2=[contentW*0.12,contentW*0.17,useLong?contentW*0.32:contentW*0.27,contentW*0.18,useLong?contentW*0.12:contentW*0.14,contentW*0.09];
+          // Header
+          if(y+8>pageH-margin) newPage();
+          pdf.setFillColor(rI+(255-rI)*0.72,gI+(255-gI)*0.72,bI+(255-bI)*0.72);
+          pdf.rect(margin,y-4,contentW,8,'F');
+          pdf.setDrawColor(rI,gI,bI);pdf.setLineWidth(0.25);pdf.rect(margin,y-4,contentW,8,'S');
+          let hx=margin;
+          ['Fase','Actividade','Descrición','Responsable','Recursos','Temp.'].forEach((h,hi)=>{
+            if(hi>0){pdf.setDrawColor(rI,gI,bI);pdf.line(hx,y-4,hx,y+4);}
+            pdf.setFont('helvetica','bold');pdf.setFontSize(7.5);pdf.setTextColor(rI,gI,bI);
+            pdf.text(pdfT(h),hx+2,y);
+            hx+=aW2[hi];
+          });
+          y+=8;
+
+          const fasesI=[...new Set(dI.actividades.map(a=>a.fase))];
+          let aRowIdx=0;
+          fasesI.forEach(fase=>{
+            const fActs=dI.actividades.filter(a=>a.fase===fase);
+            fActs.forEach((act,ai)=>{
+              const descTxt=useLong?act.descLonga:act.descCurta;
+              const dL=pdf.splitTextToSize(pdfT(descTxt),aW2[2]-4);
+              const rL=pdf.splitTextToSize(pdfT(act.responsable),aW2[3]-4);
+              const resL=pdf.splitTextToSize(pdfT(act.recursos),aW2[4]-4);
+              const tL=pdf.splitTextToSize(pdfT(act.temp),aW2[5]-4);
+              const rH2=Math.max(7,Math.max(dL.length,rL.length,resL.length,tL.length)*4.5+3);
+              if(y+rH2>pageH-margin) newPage();
+              const rb=aRowIdx%2===0;
+              pdf.setFillColor(rb?250:255,rb?249:255,rb?246:255);
+              pdf.rect(margin,y-4,contentW,rH2,'F');
+              pdf.setDrawColor(210,206,198);pdf.setLineWidth(0.2);pdf.rect(margin,y-4,contentW,rH2,'S');
+              let cx2=margin;
+              // Fase
+              if(ai===0){
+                pdf.setFont('helvetica','bold');pdf.setFontSize(7.5);pdf.setTextColor(rI,gI,bI);
+                pdf.splitTextToSize(pdfT(fase),aW2[0]-3).forEach((l,li)=>pdf.text(l,cx2+2,y+li*4.5));
+              }
+              pdf.setDrawColor(210,206,198);pdf.line(cx2+aW2[0],y-4,cx2+aW2[0],y-4+rH2); cx2+=aW2[0];
+              // Activity
+              pdf.setFont('helvetica','bold');pdf.setFontSize(7.5);pdf.setTextColor(30,30,30);
+              pdf.splitTextToSize(pdfT(act.nome),aW2[1]-3).forEach((l,li)=>pdf.text(l,cx2+2,y+li*4.5));
+              pdf.setDrawColor(210,206,198);pdf.line(cx2+aW2[1],y-4,cx2+aW2[1],y-4+rH2); cx2+=aW2[1];
+              // Description
+              pdf.setFont('helvetica','normal');pdf.setFontSize(7.5);pdf.setTextColor(50,50,50);
+              dL.forEach((l,li)=>pdf.text(pdfT(l),cx2+2,y+li*4.5));
+              pdf.setDrawColor(210,206,198);pdf.line(cx2+aW2[2],y-4,cx2+aW2[2],y-4+rH2); cx2+=aW2[2];
+              // Responsible
+              rL.forEach((l,li)=>pdf.text(pdfT(l),cx2+2,y+li*4.5));
+              pdf.setDrawColor(210,206,198);pdf.line(cx2+aW2[3],y-4,cx2+aW2[3],y-4+rH2); cx2+=aW2[3];
+              // Resources
+              resL.forEach((l,li)=>pdf.text(pdfT(l),cx2+2,y+li*4.5));
+              pdf.setDrawColor(210,206,198);pdf.line(cx2+aW2[4],y-4,cx2+aW2[4],y-4+rH2); cx2+=aW2[4];
+              // Temp
+              tL.forEach((l,li)=>pdf.text(pdfT(l),cx2+2,y+li*4.5));
+              y+=rH2;
+              aRowIdx++;
+            });
+          });
+          y+=4;
+        }
+
+        // ── Táboa de obxectivos, contidos e principios ──
+        if(cfg.incIntervRefs){
+          const allObxI=[...new Set(dI.actividades.flatMap(a=>a.obx))];
+          const allContI=[...new Set(dI.actividades.flatMap(a=>a.cont))];
+          const allPrincI=[...new Set(dI.actividades.flatMap(a=>a.princ))];
+          const maxRI=Math.max(allObxI.length,allContI.length,allPrincI.length);
+          const rW=[contentW*0.09,contentW*0.25,contentW*0.08,contentW*0.21,contentW*0.08,contentW*0.29];
+
+          if(y+8>pageH-margin) newPage();
+          pdf.setFillColor(rI+(255-rI)*0.82,gI+(255-gI)*0.82,bI+(255-bI)*0.82);
+          pdf.rect(margin,y-4,contentW,8,'F');
+          pdf.setDrawColor(rI,gI,bI);pdf.setLineWidth(0.25);pdf.rect(margin,y-4,contentW,8,'S');
+          let rx=margin;
+          [['Obx.','Obxectivos específicos'],['Cont.','Contidos'],['PM','Principios metodolóxicos']].forEach(([code,label],hi)=>{
+            if(hi>0){pdf.setDrawColor(rI,gI,bI);pdf.line(rx,y-4,rx,y+4);}
+            pdf.setFont('helvetica','bold');pdf.setFontSize(7.5);pdf.setTextColor(rI,gI,bI);
+            pdf.text(pdfT(label),rx+2,y);
+            rx+=rW[hi*2]+rW[hi*2+1];
+          });
+          y+=8;
+
+          for(let rr=0;rr<maxRI;rr++){
+            if(y+6>pageH-margin) newPage();
+            const rb2=rr%2===0;
+            pdf.setFillColor(rb2?250:255,rb2?249:255,rb2?246:255);
+            pdf.rect(margin,y-3,contentW,6,'F');
+            pdf.setDrawColor(210,206,198);pdf.setLineWidth(0.2);pdf.rect(margin,y-3,contentW,6,'S');
+            let rx2=margin;
+            [[allObxI,INTERVENCIONS_DATA.definicions.obxectivos],[allContI,INTERVENCIONS_DATA.definicions.contidos],[allPrincI,INTERVENCIONS_DATA.definicions.principios]].forEach(([arr,def],col)=>{
+              if(col>0){pdf.setDrawColor(210,206,198);pdf.line(rx2,y-3,rx2,y+3);}
+              const colW1=rW[col*2], colW2=rW[col*2+1];
+              if(rr<arr.length){
+                const code=arr[rr];
+                pdf.setFont('helvetica','bold');pdf.setFontSize(7.5);pdf.setTextColor(rI,gI,bI);
+                pdf.text(pdfT(code),rx2+2,y);
+                rx2+=colW1;
+                pdf.setDrawColor(210,206,198);pdf.line(rx2,y-3,rx2,y+3);
+                pdf.setFont('helvetica','normal');pdf.setTextColor(50,50,50);
+                const defL=pdf.splitTextToSize(pdfT(def[code]||''),colW2-3);
+                pdf.text(pdfT(defL[0]||''),rx2+2,y);
+                rx2+=colW2;
+              } else {
+                rx2+=colW1+colW2;
+              }
+            });
+            y+=6;
+          }
+          y+=5;
+        }
+        y+=4;
+      });
+    }
+  }
+
+    // ── TÁBOA DE ABREVIACIONES ───────────────────────────────────
   if(cfg.usarAbrev&&(cfg.abrevLista||cfg.numIncTabla)){
     newPage();
     sectionTitle('Táboa de abreviaciones');
@@ -4195,7 +4441,7 @@ async function exportarPDF(){
     pdf.line(margin+_c1,y-4,margin+_c1,y+4);
     if(_3col) pdf.line(margin+_c1+_c2,y-4,margin+_c1+_c2,y+4);
     pdf.setFont('helvetica','bold');pdf.setFontSize(8.5);pdf.setTextColor(60,60,60);
-    pdf.text(_numOnly?'N.':'Abrev.',margin+3,y);
+    pdf.text((_numOnly||_3col)?'N.':'Abrev.',margin+3,y);
     if(_3col){ pdf.text('Abrev.',margin+_c1+3,y); pdf.text('Nome completo',margin+_c1+_c2+3,y); }
     else      { pdf.text('Nome completo',margin+_c1+3,y); }
     y+=8;
@@ -4208,7 +4454,7 @@ async function exportarPDF(){
       if(_3col) pdf.line(margin+_c1+_c2,y-3,margin+_c1+_c2,y+3);
       pdf.setFont('helvetica','bold');pdf.setFontSize(9);pdf.setTextColor(30,79,143);
       const num=String(i+1), abr=getAbrev(a,false);
-      pdf.text(_numOnly?num:abr, margin+3,y);
+      pdf.text((_numOnly||_3col)?num:abr, margin+3,y);
       if(_3col){ pdf.text(abr,margin+_c1+3,y); pdf.setFont('helvetica','normal');pdf.setTextColor(30,30,30);pdf.text(a,margin+_c1+_c2+3,y); }
       else { pdf.setFont('helvetica','normal');pdf.setTextColor(30,30,30);pdf.text(a,margin+_c1+3,y); }
       y+=6;
@@ -4431,6 +4677,432 @@ function importarJSON(e){
   };
   reader.readAsText(file);
   e.target.value='';
+}
+
+// ════════════════════════════════════════════════════════════
+// INTERVENCIÓN SOCIOEDUCATIVA
+// ════════════════════════════════════════════════════════════
+
+function toggleIntervOpts(){
+  const chk=document.getElementById('inc-interv');
+  const opts=document.getElementById('interv-subopts');
+  if(opts) opts.style.display=chk&&chk.checked?'flex':'none';
+}
+
+function toggleExpand(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  const btn=el.previousElementSibling;
+  if(el.style.display==='none'||!el.style.display){
+    el.style.display='block';
+    if(btn&&btn.classList.contains('btn-expand-interv')) btn.textContent='Ver menos ▴';
+  } else {
+    el.style.display='none';
+    if(btn&&btn.classList.contains('btn-expand-interv')) btn.textContent='Ver máis ▾';
+  }
+}
+
+const INTERVENCIONS_DATA={
+  definicions:{
+    obxectivos:{
+      'OE1':'Recoller información sobre os patróns de elección e rexeitamento mediante o cuestionario sociométrico.',
+      'OE2':'Identificar e clasificar situacins de risco relacional presentes no grupo.',
+      'OE3':'Promover o recoñecemento social positivo do alumnado illado ou con baixa visibilidade.',
+      'OE4':'Reducir a distancia relacional entre os subgrupos identificados no grupo-clase.',
+      'OE5':'Construír un sentido de identidade e pertenza ao grupo-clase como colectivo.',
+      'OE6':'Diminuír a concentración do rexeitamento social cara ao/á alumno/a en situación de exclusión activa.',
+      'OE7':'Coordinar a intervención interdisciplinarmente co DO e a titoría do grupo.',
+      'OE8':'Valorar o impacto das intervencions mediante a triangulación de diferentes fontes.'
+    },
+    principios:{
+      'PM1':'Confidencialidade e non-estigmatización',
+      'PM2':'Coordinación interdisciplinar',
+      'PM3':'Enfoque ecolóxico',
+      'PM4':'Foco nas fortalezas',
+      'PM5':'Aprendizaxe cooperativa e participación activa',
+      'PM6':'Integración curricular',
+      'PM7':'Avaliación continua e triangulada'
+    },
+    contidos:{
+      'C1C1':'As fortalezas e contribucions individuais como elemento de valor para o grupo.',
+      'C1C2':'O papel das relacins de colaboración no benestar e no rendemento dentro da clase.',
+      'C1C3':'A diversidade de roles e funcions como recurso para o funcionamento do grupo.',
+      'C1P1':'Identificación e verbalización de aspectos positivos en compañeiros/as.',
+      'C1P2':'Participación activa en situacins de traballo cooperativo estruturado.',
+      'C1P3':'Exercicio de roles funcionais dentro da dinámica ordinaria da clase.',
+      'C1A1':'Valoración das aportacins de todos/as os/as membros do grupo.',
+      'C1A2':'Disposición á colaboración con compañeiros/as cos que non se adoita traballar.',
+      'C1A3':'Recoñecemento activo do valor individual de cada persoa dentro do grupo.',
+      'C2C1':'Os intereses e experiencias compartidas como base para novas relacins.',
+      'C2C2':'A identidade de grupo-clase como algo construído colectivamente.',
+      'C2C3':'O valor da diversidade de perspectivas dentro dun proxecto común.',
+      'C2P1':'Exploración e comunicación das propias experiencias dentro dun grupo mixto.',
+      'C2P2':'Descubrimento activo de puntos en común con compañeiros/as de subgrupos distintos.',
+      'C2P3':'Traballo cooperativo en grupos mixtos orientado a un obxectivo común.',
+      'C2A1':'Apertura e curiosidade cara a compañeiros/as cos que non se mantén relación habitual.',
+      'C2A2':'Sentido de pertenza e identidade compartida como grupo-clase.',
+      'C2A3':'Valoración da cooperación como forma de traballo máis alá dos vínculos preexistentes.',
+      'C3C1':'A responsabilidade colectiva no mantemento dun clima de convivencia respectuoso.',
+      'C3C2':'O impacto do rexeitamento e da exclusión no benestar individual e grupal.',
+      'C3P1':'Observación de comportamentos e características positivas en compañeiros/as.',
+      'C3P2':'Verbalización e comunicación pública de aspectos positivos en contextos de grupo.',
+      'C3P3':'Participación en situacins de traballo e coñecemento mutuo con compañeiros/as.',
+      'C3A1':'Revisión crítica da propia percepción sobre os/as demais.',
+      'C3A2':'Empatía cara ás experiencias de illamento, exclusión ou rexeitamento entre iguais.',
+      'C3A3':'Compromiso activo co respecto cara a todos/as como norma de convivencia.'
+    }
+  },
+  casos:{
+    1:{
+      titulo:'Illamento social',
+      subtitulo:'Alumnado con nula ou moi baixa visibilidade social no grupo-clase',
+      cor:[30,79,163],
+      importancia:'O illamento silencioso non xera alarmas visibles pero constitúe un dos preditores máis sólidos de dificultades socioemocionals a medio prazo (Cillessen e Marks, 2011). A detección temperá e a intervención estruturada son fundamentais para evitar a súa consolidación.',
+      actividades:[
+        {fase:'Avaliación inicial',nome:'Diagnóstico sociométrico',
+          descCurta:'Aplicación do cuestionario sociométrico e procesamento dos datos co programa propio.',
+          descLonga:'Aplicación do cuestionario sociométrico a todo o grupo-clase, presentado como actividade ordinaria. Procesamento co programa propio. Identificación de alumnado en situación de illamento ou baixa visibilidade social.',
+          responsable:'Alumna de prácticas + Orientadora',recursos:'Programa de sociogramas. Cuestionarios impresos.',temp:'Semana 1. 30-45 min',
+          obx:['OE1','OE2','OE7'],cont:[],princ:['PM1','PM2']},
+        {fase:'Avaliación inicial',nome:'Entrevista co/a alumno/a',
+          descCurta:'Entrevista individual informal en espazo privado para explorar benestar e relacins.',
+          descLonga:'Entrevista individual e informal nun espazo privado. Explórase o benestar percibido, as relacins na clase e os aspectos de mellora. Non se revela en ningún momento a situación detectada nin a existencia do sociograma.',
+          responsable:'Alumna de prácticas (baixo supervisión da orientadora)',recursos:'Guión de entrevista semiestruturada. Espazo privado.',temp:'Semanas 1-2. 20-30 min',
+          obx:['OE2','OE7'],cont:[],princ:['PM1','PM2','PM3']},
+        {fase:'Avaliación inicial',nome:'Consulta co/a titor/a',
+          descCurta:'Reunión para contrastar os resultados do sociograma coa percepción docente.',
+          descLonga:'Reunión para contrastar os resultados do sociograma coa percepción docente: duración do illamento, incidentes previos, contexto familiar e recursos propios do/a alumno/a.',
+          responsable:'Alumna de prácticas + Titor/a',recursos:'Informe resumo do sociograma.',temp:'Semanas 1-2. 15-20 min',
+          obx:['OE2','OE7'],cont:[],princ:['PM2','PM3']},
+        {fase:'Actividade mediada',nome:'Os Superpoderes da Clase',
+          descCurta:'Mural con sobres: cada alumno/a recibe fichas cos seus puntos fortes de compañeiros/as asignados estratexicamente.',
+          descLonga:'Cada alumno/a decora un sobre co seu nome, colocado nun mural común. A alumna de prácticas asigna previamente a quen lle escribe cada un/ha, garantindo que o/a alumno/a illado/a recibe fichas de estudantes con perfil positivo. Cada estudante cumprimentará fichas con: (1) nome do/a compañeiro/a, (2) algo positivo dese/a compañeiro/a e (3) o seu "superpoder" na clase. As fichas deposítanse nos sobres correspondentes.',
+          responsable:'Alumna de prácticas (facilita) + Titor/a (presente)',recursos:'Sobres (1/alumno/a). Fichas estruturadas. Materiais de decoración. Mural na aula.',temp:'Semana 2. 60 min (ou 2×30 min)',
+          obx:['OE3','OE7'],cont:['C1C1','C1P1','C1A1','C1A3'],princ:['PM1','PM4','PM5']},
+        {fase:'Recomendacións para a aula',nome:'Titoría entre iguais',
+          descCurta:'Parella de traballo semanal con compañeiro/a de perfil positivo, seleccionado/a mediante o sociograma.',
+          descLonga:'Identificación mediante o sociograma dun/ha compañeiro/a con perfil positivo cara ao/á alumno/a para traballo conxunto semanal (repaso, proxecto creativo, etc.). Preséntase como parte dunha rotación xeral de parellas da clase para non singularizar.',
+          responsable:'Titor/a (implementa) + Alumna de prácticas (selección da parella)',recursos:'Datos do sociograma. Integrado no horario ordinario.',temp:'Semanas 2-9. 1 sesión/semana (45-60 min)',
+          obx:['OE3','OE7','OE8'],cont:['C1C2','C1P2','C1A2'],princ:['PM2','PM5','PM6']},
+        {fase:'Recomendacións para a aula',nome:'Roles funcionais na aula',
+          descCurta:'Rol visible e acorde ás fortalezas do/a alumno/a dentro da dinámica de clase.',
+          descLonga:'Asignación ao/á alumno/a dun rol funcional e visible acorde ás súas fortalezas identificadas na entrevista (ex: responsable do material dixital, monitor/a de biblioteca, coordinador/a de orde). Os roles son rotativos en toda a clase para non singularizar. A alumna de prácticas orienta a selección do rol máis adecuado.',
+          responsable:'Titor/a (implementa) + Alumna de prácticas (orienta selección)',recursos:'Lista de roles elaborada coa alumna de prácticas. Sen custo adicional.',temp:'Desde semana 2. Revisión cada 2-3 semanas',
+          obx:['OE3','OE7'],cont:['C1C3','C1P3','C1A3'],princ:['PM4','PM5','PM6']},
+        {fase:'Recomendacións para a aula',nome:'Técnica Puzzle / Jigsaw',
+          descCurta:'Traballo cooperativo con grupos mixtos asignados estratexicamente segundo o sociograma.',
+          descLonga:'División dun tema curricular en partes e asignación estratéxica de grupos expertos mediante os datos do sociograma: o/a alumno/a illado/a comparte grupo con estudantes de perfil positivo cara a el/ela. Cada experto/a ensina ao grupo mixto. Adaptable a calquera área curricular. A alumna de prácticas pode asistir a algunha sesión de apoio.',
+          responsable:'Titor/a (implementa) + Alumna de prácticas (composición dos grupos; posible asistencia)',recursos:'Materiais curriculares adaptados á técnica. Sen custo adicional.',temp:'Semanas 2-8. 3-4 sesións integradas no horario',
+          obx:['OE3','OE7'],cont:['C1C2','C1P2','C1A2','C1A3'],princ:['PM2','PM5','PM6']},
+        {fase:'Seguimento',nome:'Escala de benestar social',
+          descCurta:'5 ítems Likert (1-5) aplicados ao/á alumno/a + rexistro semanal do/a titor/a.',
+          descLonga:'Escala de 5 ítems Likert (1-5) aplicada ao/á alumno/a: "Síntome parte desta clase" / "Teño con quen falar no recreo" / "Se necesito axuda, algún/ha compañeiro/a axúdame" / "Gústame vir ao cole" / "Síntome ben sendo como son". Complementada cun rexistro semanal do/a titor/a sobre interaccions espontáneas observadas.',
+          responsable:'Alumna de prácticas (aplica e analiza) + Titor/a (rexistro de observación)',recursos:'Escala impresa (1 folla/aplicación). Ficha de rexistro semanal para o/a titor/a.',temp:'Semana 4 (1ª) e Semana 8 (2ª). Rexistro titor/a: semanal',
+          obx:['OE8'],cont:[],princ:['PM7']},
+        {fase:'Avaliación conclusiva',nome:'Avaliación conclusiva',
+          descCurta:'Triangulación: observación directa, enquisa ao/á titor/a, entrevista de peche co/a alumno/a.',
+          descLonga:'Triangulación de fontes: (1) observación directa da alumna de prácticas (última semana); (2) enquisa ao/á titor/a sobre cambios percibidos; (3) entrevista informal de peche co/a alumno/a (mesmas preguntas iniciais + "nótaste algo diferente?"); (4) posibilidade de repetir o sociograma na semana 9.',
+          responsable:'Alumna de prácticas + Orientadora + Titor/a',recursos:'Guión de entrevista. Enquisa para titor/a. Programa de sociogramas (se se repite).',temp:'Semanas 9-10',
+          obx:['OE7','OE8'],cont:[],princ:['PM2','PM7']}
+      ]
+    },
+    2:{
+      titulo:'Baixa cohesión grupal',
+      subtitulo:'Fragmentación do grupo en subgrupos pechados con escasa interrelación',
+      cor:[42,94,68],
+      importancia:'Os subgrupos pechados consolídanse progresivamente e xeran dinámicas de exclusión informal. O alumnado periférico sen subgrupo definido é especialmente vulnerable. Sen intervención, a fragmentación tende a agudizarse ao longo do curso.',
+      actividades:[
+        {fase:'Avaliación inicial',nome:'Diagnóstico sociométrico',
+          descCurta:'Aplicación do cuestionario e análise dos indicadores grupais: reciprocidade, cohesión e subgrupos.',
+          descLonga:'Aplicación do cuestionario sociométrico ao grupo-clase. Procesamento co programa propio con énfase nos indicadores grupais: porcentaxe de reciprocidade, densidade de cohesión, número e tipo de subgrupos identificados e alumnado sen subgrupo definido.',
+          responsable:'Alumna de prácticas + Orientadora',recursos:'Programa de sociogramas. Cuestionarios impresos.',temp:'Semana 1. 30-45 min',
+          obx:['OE1','OE2','OE7'],cont:[],princ:['PM1','PM2']},
+        {fase:'Avaliación inicial',nome:'Consulta co/a titor/a',
+          descCurta:'Reunión para contextualizar a fragmentación: orixe, duración, incidentes.',
+          descLonga:'Reunión para contrastar os resultados do sociograma coa percepción docente: orixe e duración da fragmentación, incidentes previos entre subgrupos, alumnado máis periférico e posibles resistencias á mestura de grupos.',
+          responsable:'Alumna de prácticas + Titor/a',recursos:'Informe resumo do sociograma (indicadores grupais).',temp:'Semanas 1-2. 20 min',
+          obx:['OE2','OE7'],cont:[],princ:['PM2','PM3']},
+        {fase:'Actividade mediada',nome:'O Mural das Semellanzas',
+          descCurta:'Grupos mixtos descobren intereses comúns e constrúen un mural colectivo por categorías.',
+          descLonga:'A alumna de prácticas forma grupos de traballo mixtos (un/ha membro de cada subgrupo + alumnado sen subgrupo). Cada alumno/a completa 5 ítems en formato libre: (1) hobbie favorito, (2) actividade extraescolar, (3) libro/película/serie favorita, (4) materia preferida, (5) actividade favorita no recreo. Mentres traballan comparten en voz alta. Despois recórtanse os ítems e construción colectiva do mural por categorías. A alumna facilita destacando semellanzas entre alumnado de subgrupos distintos.',
+          responsable:'Alumna de prácticas (facilita) + Titor/a (presente)',recursos:'Fichas estruturadas impresas (1/alumno/a). Tesoiras, pegamento. Cartolina para mural. Rotuladores.',temp:'Semana 3. 90 min (ou 2×45 min)',
+          obx:['OE4','OE5','OE7'],cont:['C2C1','C2P1','C2P2','C2A1','C2A2'],princ:['PM1','PM4','PM5']},
+        {fase:'Recomendacións para a aula',nome:'Técnica Puzzle / Jigsaw intergrupal',
+          descCurta:'Grupos expertos con membros de distintos subgrupos, asignados mediante o sociograma.',
+          descLonga:'División dun tema curricular en partes. Cada grupo experto inclúe membros de subgrupos distintos segundo os datos do sociograma. Cada experto/a ensina ao grupo mixto. A alumna de prácticas pode asistir a algunha sesión. Adaptable a calquera área.',
+          responsable:'Titor/a (implementa) + Alumna de prácticas (composición dos grupos; posible asistencia)',recursos:'Materiais curriculares adaptados. Sen custo adicional.',temp:'Semanas 3-8. 3-4 sesións integradas',
+          obx:['OE4','OE7'],cont:['C2C3','C2P3','C2A1','C2A3'],princ:['PM2','PM5','PM6']},
+        {fase:'Recomendacións para a aula',nome:'Rotación de grupos de mesa',
+          descCurta:'Sistema de rotación cada 2-3 semanas orientado polo sociograma.',
+          descLonga:'O/A titor/a establece rotación de grupos de mesa cada 2-3 semanas. A alumna de prácticas orienta cada configuración usando o sociograma: garantindo membros de distintos subgrupos en cada grupo e evitando pares con rexeitamento mutuo. Preséntase como organización ordinaria da aula.',
+          responsable:'Titor/a (implementa) + Alumna de prácticas (composición de cada rotación)',recursos:'Lista de rotacins elaborada coa alumna de prácticas. Sen custo.',temp:'Desde semana 3. Rotacins en semanas 3, 5-6 e 8-9',
+          obx:['OE4','OE5','OE7'],cont:['C2A1','C2A2'],princ:['PM2','PM6']},
+        {fase:'Recomendacións para a aula',nome:'Titoría entre iguais intergrupal',
+          descCurta:'Parellas de traballo entre alumnado de subgrupos distintos, sen mencions negativas mutuas.',
+          descLonga:'Creación de parellas de traballo semanal entre alumnado de subgrupos distintos, sen mencions negativas mutuas no sociograma. Preséntase como parte dunha rotación xeral de parellas da clase.',
+          responsable:'Titor/a (implementa) + Alumna de prácticas (selección intergrupal das parellas)',recursos:'Datos do sociograma. Integrado no horario ordinario.',temp:'Semanas 3-9. 1 sesión/semana (45-60 min)',
+          obx:['OE4','OE7','OE8'],cont:['C2P3','C2A1','C2A3'],princ:['PM2','PM5','PM6']},
+        {fase:'Recomendacións para a aula',nome:'Proxecto grupo-clase',
+          descCurta:'Proxecto colectivo con roles complementarios e grupos mixtos (ex: teatro de Entroido).',
+          descLonga:'Proxecto colectivo que implica a toda a clase con roles complementarios. Proposta de referencia: obra de teatro para un evento escolar (Entroido, Semana Cultural, Día da Paz). Roles posibles: actores/actrices, dirección de escena, decorado, vestiario, efectos de son, programas de man. Grupos mixtos asignados mediante o sociograma. A alumna de prácticas pode colaborar na coordinación e nas sesións de traballo.',
+          responsable:'Titor/a (coordina) + Alumna de prácticas (composición dos grupos; colaboración)',recursos:'Materiais segundo o proxecto. Coordinación co centro para data e espazo.',temp:'Semanas 4-9. Integrado en Lingua, Plástica e Titoría',
+          obx:['OE4','OE5','OE7'],cont:['C2C2','C2C3','C2P3','C2A2','C2A3'],princ:['PM2','PM5','PM6']},
+        {fase:'Seguimento',nome:'Escala de clima de aula',
+          descCurta:'5 ítems Likert (1-5) para toda a clase + rexistro de agrupamentos espontáneos do/a titor/a.',
+          descLonga:'5 ítems Likert (1-5) aplicados a toda a clase: "Nesta clase traballamos ben xuntos/as" / "Podo pedir axuda a calquera compañeiro/a, non só ao meu grupo habitual" / "Nesta clase respectámonos todos/as" / "Gústame traballar en grupos diferentes" / "Sinto que somos un bo equipo". Rexistro semanal do/a titor/a sobre agrupamentos espontáneos (recreo, traballo libre).',
+          responsable:'Alumna de prácticas (aplica e analiza) + Titor/a (rexistro de observación)',recursos:'Escala impresa (1 folla/alumno/a por aplicación). Ficha de rexistro semanal.',temp:'Semana 4 (1ª) e Semana 8 (2ª). Rexistro titor/a: semanal',
+          obx:['OE8'],cont:[],princ:['PM7']},
+        {fase:'Avaliación conclusiva',nome:'Avaliación conclusiva',
+          descCurta:'Triangulación: observación de agrupamentos espontáneos, enquisa ao/á titor/a, posibilidade de repetir sociograma.',
+          descLonga:'Triangulación de fontes: (1) observación directa da alumna de prácticas (agrupamentos espontáneos na última semana); (2) enquisa ao/á titor/a sobre cambios percibidos na dinámica grupal; (3) posibilidade de repetir o sociograma na semana 9, permitindo comparación directa dos indicadores de reciprocidade, cohesión e número e intensidade de subgrupos.',
+          responsable:'Alumna de prácticas + Orientadora + Titor/a',recursos:'Enquisa para o/a titor/a. Programa de sociogramas (se se repite).',temp:'Semanas 9-10',
+          obx:['OE7','OE8'],cont:[],princ:['PM2','PM7']}
+      ]
+    },
+    3:{
+      titulo:'Rexeitamento activo',
+      subtitulo:'Alumnado con mencions negativas ≥ 2 veces as positivas',
+      cor:[146,20,20],
+      aviso:'⚠️ PASO PREVIO OBRIGATORIO: Antes de calquera acción, traslade os resultados á orientadora titular. A reunión conxunta (orientadora + titor/a + alumna de prácticas) debe valorar a gravidade e comprobar se procede activar o protocolo de convivencia do centro. A alumna de prácticas actúa en todo momento baixo supervisión directa da orientadora.',
+      importancia:'O rexeitamento activo sistemático é un dos preditores máis sólidos de acoso escolar e constitúe un indicador de risco prioritario. Require coordinación institucional, intervención fundamentada e seguimento continuo. A intervención debe combinarse con accins grupais non identificadoras.',
+      actividades:[
+        {fase:'Avaliación inicial',nome:'Diagnóstico sociométrico',
+          descCurta:'Análise do perfil de rexeitamento: cociente mencions negativas/positivas e emisores frecuentes.',
+          descLonga:'Aplicación do cuestionario sociométrico. Procesamento co programa propio con énfase no perfil de rexeitamento activo: cociente mencions negativas/positivas, concentración do rexeitamento e identificación dos/as principais emisores/as de mencions negativas cara ao/á alumno/a.',
+          responsable:'Alumna de prácticas + Orientadora',recursos:'Programa de sociogramas. Cuestionarios impresos.',temp:'Semana 1. 30-45 min',
+          obx:['OE1','OE2','OE7'],cont:[],princ:['PM1','PM2']},
+        {fase:'Avaliación inicial',nome:'Reunión de coordinación e avaliación do protocolo',
+          descCurta:'⚠️ Paso obrigatorio. Reunión con orientadora e titor/a para valorar gravidade e protocolo.',
+          descLonga:'A alumna de prácticas traslada os resultados á orientadora titular. Reunión conxunta (orientadora + titor/a + alumna de prácticas) para: valorar a gravidade do rexeitamento, comprobar se existen indicadores que activen o protocolo de convivencia do centro e acordar o plan de intervención. A alumna de prácticas actúa en todo momento baixo supervisión directa.',
+          responsable:'Orientadora (lidera) + Alumna de prácticas + Titor/a',recursos:'Informe resumo do sociograma. Protocolo de convivencia do centro (consulta).',temp:'Semanas 1-2. 30 min',
+          obx:['OE2','OE7'],cont:[],princ:['PM1','PM2','PM3']},
+        {fase:'Avaliación inicial',nome:'Entrevista co/a alumno/a',
+          descCurta:'Entrevista individual baixo supervisión directa da orientadora. Sen revelar a situación detectada.',
+          descLonga:'Entrevista individual realizada baixo supervisión directa da orientadora. Explórase: benestar xeral na clase, relacins con compañeiros/as, posibles situacins de malestar e aspectos que lle gustaría cambiar. Non se revela en ningún momento a situación detectada nin a existencia do sociograma.',
+          responsable:'Alumna de prácticas (baixo supervisión directa da orientadora)',recursos:'Guión de entrevista semiestruturada. Espazo privado (despacho de orientación).',temp:'Semana 2. 20-30 min',
+          obx:['OE2','OE7'],cont:[],princ:['PM1','PM2','PM3']},
+        {fase:'Avaliación inicial',nome:'Consulta co/a titor/a',
+          descCurta:'Contexto do rexeitamento: duración, incidentes, comportamentos desencadeantes.',
+          descLonga:'Reunión para obter contexto sobre a situación: duración do rexeitamento, incidentes rexistrados, comportamentos do/a alumno/a que poidan estar a xerar ou manter o rexeitamento, relación coa familia e recursos propios do/a alumno/a.',
+          responsable:'Alumna de prácticas + Titor/a',recursos:'Informe do sociograma (perfil do/a alumno/a en cuestión).',temp:'Semana 2. 20-30 min',
+          obx:['OE2','OE7'],cont:[],princ:['PM2','PM3']},
+        {fase:'Actividade mediada',nome:'Os Superpoderes e/ou O Mural das Semellanzas',
+          descCurta:'Actividade grupal para aumentar a visibilidade positiva do/a alumno/a. Elección conxunta con orientadora e titor/a.',
+          descLonga:'Elección conxunta coa orientadora e titor/a segundo as características do caso. Superpoderes: garantir que o/a alumno/a rexeitado/a recibe fichas de compañeiros/as con mencions positivas cara a el/ela (identificados/as no sociograma). Mural das Semellanzas: colocar ao/á alumno/a nun grupo formado exclusivamente por alumnado sen mencions negativas cara a el/ela. En ningún caso se presenta como resposta á situación detectada.',
+          responsable:'Alumna de prácticas (facilita) + Titor/a (presente)',recursos:'Materiais das actividades correspondentes (ver descrición de cada actividade).',temp:'Semana 3. 60-90 min segundo actividade elixida',
+          obx:['OE6','OE7'],cont:['C3C1','C3P1','C3P2','C3P3','C3A1','C3A2'],princ:['PM1','PM4','PM5']},
+        {fase:'Recomendacións para a aula',nome:'Técnica Puzzle (composición controlada)',
+          descCurta:'Nunca colocar ao/á alumno/a con emisores frecuentes de mencions negativas cara a el/ela.',
+          descLonga:'Traballo cooperativo en grupos mixtos. Consideración específica: nunca colocar ao/á alumno/a rexeitado/a en grupos onde haxa alumnado que lle teña dado mencions negativas con alta frecuencia. A alumna identifica previamente no sociograma estes pares conflitivos e orienta a composición dos grupos para evitar a súa coincidencia.',
+          responsable:'Titor/a (implementa) + Alumna de prácticas (composición dos grupos; posible asistencia)',recursos:'Materiais curriculares adaptados. Sen custo adicional.',temp:'Semanas 3-8. 3-4 sesións integradas no horario',
+          obx:['OE6','OE7'],cont:['C3P3','C3A1','C3A3'],princ:['PM2','PM5','PM6']},
+        {fase:'Recomendacións para a aula',nome:'Rotación de grupos de mesa',
+          descCurta:'Rotación evitando a proximidade do/a alumno/a con emisores frecuentes de rexeitamento.',
+          descLonga:'Sistema de rotación de grupos de mesa cada 2-3 semanas. A alumna de prácticas orienta cada configuración evitando a coincidencia do/a alumno/a rexeitado/a con alumnado emisor de mencions negativas frecuentes, e favorecendo a súa proximidade con alumnado de perfil neutro ou positivo cara a el/ela.',
+          responsable:'Titor/a (implementa) + Alumna de prácticas (composición de cada rotación)',recursos:'Lista de rotacins. Sen custo adicional.',temp:'Desde semana 3. Rotacins en semanas 3, 5-6 e 8-9',
+          obx:['OE6','OE7'],cont:['C3A1','C3A3'],princ:['PM2','PM6']},
+        {fase:'Recomendacións para a aula',nome:'Titoría entre iguais',
+          descCurta:'Parella de traballo co/a alumno/a que máis mencions positivas lle deu no sociograma.',
+          descLonga:'Identificación mediante o sociograma do/a compañeiro/a que máis mencions positivas lle teña dado ao/á alumno/a rexeitado/a. Proposta de parella de traballo semanal entre ambos/as. Preséntase como parte dunha rotación xeral de parellas da clase.',
+          responsable:'Titor/a (implementa) + Alumna de prácticas (selección estratéxica da parella)',recursos:'Datos do sociograma. Integrado no horario ordinario.',temp:'Semanas 3-9. 1 sesión/semana (45-60 min)',
+          obx:['OE6','OE7','OE8'],cont:['C3P3','C3A1','C3A2'],princ:['PM2','PM5','PM6']},
+        {fase:'Recomendacións para a aula',nome:'Roles funcionais na aula',
+          descCurta:'Rol visible e acorde ás fortalezas do/a alumno/a para xerar interaccions positivas inevitables.',
+          descLonga:'Asignación dun rol funcional e visible acorde ás fortalezas do/a alumno/a. Igual que no Caso 1, os roles son rotativos en toda a clase para non singularizar. O obxectivo específico neste caso é crear interaccions inevitables e de carácter positivo entre o/a alumno/a e os/as seus/súas compañeiros/as.',
+          responsable:'Titor/a (implementa) + Alumna de prácticas (orienta selección)',recursos:'Lista de roles. Sen custo adicional.',temp:'Desde semana 3. Revisión semanas 5-6 e 8-9',
+          obx:['OE6','OE7'],cont:['C3P1','C3P2','C3A3'],princ:['PM4','PM5','PM6']},
+        {fase:'Seguimento',nome:'Escala de benestar + rexistro de incidencias',
+          descCurta:'Escala ao/á alumno/a + rexistro de incidencias + reunións quincenais de seguimento.',
+          descLonga:'Escala de benestar (5 ítems Likert 1-5) aplicada individualmente ao/á alumno/a. Rexistro de incidencias do/a titor/a: calquera situación de exclusión, insulto ou rexeitamento observable, así como de mellora nas interaccions. Reunión de seguimento quincenal (alumna de prácticas + orientadora + titor/a) para valorar evolución e axustar a intervención se é necesario.',
+          responsable:'Alumna de prácticas (escala e reunión) + Titor/a (rexistro de incidencias) + Orientadora (reunión)',recursos:'Escala impresa. Ficha de rexistro de incidencias para o/a titor/a.',temp:'Semanas 4 e 8 (escala). Rexistro: semanal. Reunións: semanas 4 e 7',
+          obx:['OE8'],cont:[],princ:['PM2','PM7']},
+        {fase:'Avaliación conclusiva',nome:'Avaliación conclusiva + informe de continuidade',
+          descCurta:'Triangulación + informe de continuidade entregado á orientadora e ao/á titor/a.',
+          descLonga:'Triangulación: (1) observación directa da alumna de prácticas (última semana); (2) enquisa ao/á titor/a sobre cambios percibidos; (3) entrevista informal de peche co/a alumno/a; (4) posibilidade de repetir o sociograma na semana 9. Informe de continuidade entregado á orientadora e ao/á titor/a: aspectos a manter, reforzar e vixiar.',
+          responsable:'Alumna de prácticas + Orientadora + Titor/a',recursos:'Guión de entrevista. Enquisa para titor/a. Informe de continuidade. Programa (se se repite).',temp:'Semanas 9-10. Informe entregado en semana 10',
+          obx:['OE7','OE8'],cont:[],princ:['PM2','PM7']}
+      ]
+    }
+  }
+};
+
+function renderIntervencions(){
+  const container=document.getElementById('intervencions-content');
+  if(!container)return;
+  if(!ST.alumnos.length){
+    container.innerHTML='<div class="card"><p style="color:var(--text2);font-size:13px">Introduce os datos do alumnado e os cuestionarios para ver as recomendacins de intervención.</p></div>';
+    return;
+  }
+  const idx=calcIndices();
+  const {pos,neg}=getMenciones();
+
+  // ── Detectar casos ──
+  const casosDetectados=[];
+  const afect1=[...new Set([...(idx.illados||[]),...(idx.ignoradosSocio||[])])];
+  if(afect1.length>0) casosDetectados.push({tipo:1,alumnado:afect1});
+  if(ST.alumnos.length>=5&&(idx.reciprocidade<35||idx.densidadeInterna<15)) casosDetectados.push({tipo:2});
+  const afect3=[...(idx.rexeitadosSocio||[])];
+  if(afect3.length>0) casosDetectados.push({tipo:3,alumnado:afect3});
+
+  let html='';
+
+  // ── Intro card ──
+  html+=`<div class="card">
+    <div class="card-title">Focos de actuación detectados</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px">En base aos resultados da análise sociométrica do grupo, contémplanse os seguintes focos de actuación. Recóllense os tres casos tipo predefinidos no proxecto de intervención socioeducativa: illamento social, baixa cohesión grupal e rexeitamento activo.</p>`;
+
+  if(casosDetectados.length===0){
+    html+=`<div style="background:rgba(58,125,68,.07);border:1.5px solid #3a7d44;border-radius:10px;padding:16px 20px;display:flex;align-items:flex-start;gap:14px">
+      <div style="font-size:26px;margin-top:2px">✅</div>
+      <div>
+        <div style="font-weight:700;color:#3a7d44;font-size:14px;margin-bottom:5px">Non se detectaron necesidades de intervención socioeducativa predefinidas</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6">En base á análise sociométrica realizada, non se aprecian ningunha das situacins de risco predefinidas (illamento social, baixa cohesión grupal ou rexeitamento activo) no grupo-clase. Os indicadores atópanse dentro de rangos compatibles cunha dinámica grupal saudable. Recoméndase repetir a análise ao longo do curso para verificar a estabilidade das dinámicas relacionais.</div>
+      </div>
+    </div>`;
+  } else {
+    html+=`<div style="display:flex;gap:8px;flex-wrap:wrap">`;
+    casosDetectados.forEach(c=>{
+      const d=INTERVENCIONS_DATA.casos[c.tipo];
+      const [r,g,b]=d.cor;
+      html+=`<span style="background:rgba(${r},${g},${b},.12);border:1.5px solid rgb(${r},${g},${b});border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700;color:rgb(${r},${g},${b})">Caso ${c.tipo}: ${d.titulo}</span>`;
+    });
+    html+=`</div>`;
+  }
+  html+=`</div>`;
+
+  // ── Each detected case ──
+  casosDetectados.forEach((caso,ci)=>{
+    const d=INTERVENCIONS_DATA.casos[caso.tipo];
+    const [r,g,b]=d.cor;
+    const col=`rgb(${r},${g},${b})`;
+    const lightBg=`rgba(${r},${g},${b},0.07)`;
+    const midBg=`rgba(${r},${g},${b},0.14)`;
+
+    html+=`<div class="card" style="border-top:3px solid ${col}">
+      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:3px">
+        <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:${col}">Caso ${caso.tipo}</span>
+        <span class="card-title" style="margin-bottom:0;color:${col}">${d.titulo}</span>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:14px">${d.subtitulo}</div>`;
+
+    // Warning for Case 3
+    if(caso.tipo===3&&d.aviso){
+      html+=`<div style="background:#fff3f3;border:1.5px solid #c0392b;border-radius:8px;padding:12px 16px;margin-bottom:14px;font-size:12px;color:#7a1010;line-height:1.6">${d.aviso}</div>`;
+    }
+
+    // Affected students
+    if(caso.alumnado&&caso.alumnado.length>0){
+      html+=`<div style="margin-bottom:12px">
+        <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Alumnado detectado</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">`;
+      caso.alumnado.forEach(a=>{
+        html+=`<span style="background:${lightBg};border:1px solid ${col};border-radius:16px;padding:3px 10px;font-size:12px;font-weight:600;color:${col}">${a}</span>`;
+      });
+      html+=`</div></div>`;
+    }
+
+    // Case 2 indicators
+    if(caso.tipo===2){
+      html+=`<div style="margin-bottom:12px;font-size:12px;color:var(--text2)">
+        <strong>Indicadores que xustifican a intervención:</strong> Reciprocidade grupal: <strong>${idx.reciprocidade}%</strong> (referencia ≥35%) · Cohesión interna: <strong>${idx.densidadeInterna}%</strong> (referencia ≥15%)
+      </div>`;
+    }
+
+    // Importance
+    html+=`<div style="background:${lightBg};border-radius:8px;padding:12px 14px;margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:${col};margin-bottom:5px">Importancia da intervención</div>
+      <p style="font-size:12px;color:var(--text2);line-height:1.65;margin:0">${d.importancia}</p>
+    </div>`;
+
+    // Activity table
+    html+=`<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:8px">Plan de intervención proposto</div>
+    <div style="overflow-x:auto;margin-bottom:8px">
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr style="background:${col};color:#fff">
+        <th style="padding:8px 10px;text-align:left;width:12%">Fase</th>
+        <th style="padding:8px 10px;text-align:left;width:18%">Actividade</th>
+        <th style="padding:8px 10px;text-align:left;width:30%">Descrición</th>
+        <th style="padding:8px 10px;text-align:left;width:16%">Responsable</th>
+        <th style="padding:8px 10px;text-align:left;width:13%">Recursos</th>
+        <th style="padding:8px 10px;text-align:left;width:11%">Temp.</th>
+      </tr></thead>
+      <tbody>`;
+
+    const fases=[...new Set(d.actividades.map(a=>a.fase))];
+    let rowIdx=0;
+    fases.forEach(fase=>{
+      const acts=d.actividades.filter(a=>a.fase===fase);
+      acts.forEach((act,ai)=>{
+        const actId=`interv-${ci}-${rowIdx}`;
+        const bg=rowIdx%2===0?'background:var(--surface2)':'background:var(--surface)';
+        html+=`<tr style="${bg}">`;
+        if(ai===0){
+          html+=`<td rowspan="${acts.length}" style="padding:8px 10px;vertical-align:middle;font-weight:700;font-size:11px;color:${col};border-right:2px solid ${col};border-bottom:1px solid var(--border);line-height:1.35">${fase}</td>`;
+        }
+        html+=`<td style="padding:8px 10px;font-weight:600;color:var(--text);border-bottom:1px solid var(--border);vertical-align:top">${act.nome}</td>
+        <td style="padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top">
+          <span style="font-size:12px">${act.descCurta}</span>
+          <button class="btn-expand-interv" onclick="toggleExpand('${actId}')" style="display:inline-block;margin-left:6px;background:none;border:none;color:${col};cursor:pointer;font-size:11px;padding:0;font-weight:700">Ver máis ▾</button>
+          <div id="${actId}" style="display:none;margin-top:7px;padding-top:7px;border-top:1px dashed var(--border);font-size:11.5px;color:var(--text2);line-height:1.6">${act.descLonga}</div>
+        </td>
+        <td style="padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;font-size:11px">${act.responsable}</td>
+        <td style="padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;font-size:11px">${act.recursos}</td>
+        <td style="padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;font-size:11px">${act.temp}</td>
+        </tr>`;
+        rowIdx++;
+      });
+    });
+    html+=`</tbody></table></div>`;
+
+    // Objectives / Contents / Principles reference table (collapsible)
+    const allObx=[...new Set(d.actividades.flatMap(a=>a.obx))];
+    const allCont=[...new Set(d.actividades.flatMap(a=>a.cont))];
+    const allPrinc=[...new Set(d.actividades.flatMap(a=>a.princ))];
+    const maxR=Math.max(allObx.length,allCont.length,allPrinc.length);
+
+    html+=`<details style="margin-top:4px">
+      <summary style="cursor:pointer;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;padding:6px 0;list-style:none;user-select:none">▸ Obxectivos · Contidos · Principios metodolóxicos desta intervención</summary>
+      <div style="margin:8px 0 4px;padding:8px 12px;background:rgba(30,79,163,.07);border-left:3px solid #1e4fa3;border-radius:0 6px 6px 0;font-size:11.5px;color:#1e4fa3;font-style:italic">Os obxectivos específicos (OE), contidos (C) e principios metodolóxicos (PM) que se indican a continuación forman parte da estrutura formal do <strong>Proxecto de Intervención Socioeducativa do Prácticum I</strong>, onde están definidos e xustificados en detalle.</div>
+      <div style="margin-top:10px;overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:11.5px">
+        <thead><tr style="background:${midBg}">
+          <th colspan="2" style="padding:7px 10px;text-align:left;font-weight:700;color:${col};border-bottom:2px solid ${col};width:34%">Obxectivos específicos</th>
+          <th colspan="2" style="padding:7px 10px;text-align:left;font-weight:700;color:${col};border-bottom:2px solid ${col};border-left:1px solid var(--border);width:34%">Contidos</th>
+          <th colspan="2" style="padding:7px 10px;text-align:left;font-weight:700;color:${col};border-bottom:2px solid ${col};border-left:1px solid var(--border);width:32%">Principios metodolóxicos</th>
+        </tr></thead>
+        <tbody>`;
+
+    for(let rr=0;rr<maxR;rr++){
+      const rb=rr%2===0?'background:var(--surface2)':'';
+      html+=`<tr style="${rb}">`;
+      if(rr<allObx.length){
+        const code=allObx[rr];
+        html+=`<td style="padding:5px 8px;font-weight:700;color:${col};white-space:nowrap;border-bottom:1px solid var(--border);vertical-align:top">${code}</td>
+          <td style="padding:5px 8px;color:var(--text2);border-bottom:1px solid var(--border);vertical-align:top">${INTERVENCIONS_DATA.definicions.obxectivos[code]||''}</td>`;
+      } else {
+        html+=`<td colspan="2" style="border-bottom:1px solid var(--border)"></td>`;
+      }
+      if(rr<allCont.length){
+        const code=allCont[rr];
+        html+=`<td style="padding:5px 8px;font-weight:700;color:${col};white-space:nowrap;border-bottom:1px solid var(--border);border-left:1px solid var(--border);vertical-align:top">${code}</td>
+          <td style="padding:5px 8px;color:var(--text2);border-bottom:1px solid var(--border);vertical-align:top">${INTERVENCIONS_DATA.definicions.contidos[code]||''}</td>`;
+      } else {
+        html+=`<td colspan="2" style="border-bottom:1px solid var(--border);border-left:1px solid var(--border)"></td>`;
+      }
+      if(rr<allPrinc.length){
+        const code=allPrinc[rr];
+        html+=`<td style="padding:5px 8px;font-weight:700;color:${col};white-space:nowrap;border-bottom:1px solid var(--border);border-left:1px solid var(--border);vertical-align:top">${code}</td>
+          <td style="padding:5px 8px;color:var(--text2);border-bottom:1px solid var(--border);vertical-align:top">${INTERVENCIONS_DATA.definicions.principios[code]||''}</td>`;
+      } else {
+        html+=`<td colspan="2" style="border-bottom:1px solid var(--border);border-left:1px solid var(--border)"></td>`;
+      }
+      html+=`</tr>`;
+    }
+    html+=`</tbody></table></div></details>`;
+    html+=`</div>`; // close card
+  });
+
+  container.innerHTML=html;
 }
 
 </script>
